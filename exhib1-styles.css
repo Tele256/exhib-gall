@@ -52,6 +52,11 @@ p.quote-author {
     width: 100%;
 }
 
+.exhib {
+    text-decoration: none;
+    color: #000000;
+}
+
 body {
     background-color: #ffffff;
     display: flex;
