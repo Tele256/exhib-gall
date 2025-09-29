@@ -71,6 +71,10 @@ body {
     #canvas {
         width: 320px;
     }
+
+    .title {
+        font-size: 2em;
+    }
 }
 
 @media (max-width: 360px) {
