@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Silent Presence</title>
+    <link rel="stylesheet" href="exhib2-styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a class="exhib" href="index.html">< Exhibit 2</a>
+            <p class="signature">----- -..- - . .-.. .</p>
+        </div>
+        <h1 class="title">Silent Presence</h1>
+        <div class="space">
+            <p class="counter-text" id="top-text">There are currently</p>
+            <h3 id="counter">0</h3>
+            <p class="counter-text" id="bottom-text">people here.</p>
+        </div>
+        <p class="caption" id="punch">You are here together, yet forever separate.</p>
+        <p class="caption">In this place, the numbers you see are more than statistics, they are the quiet tally of unseen lives, counted in real time as they share this space with you. No voices, no gestures, no names, only the weight of existence, tracked and suspended in silence. Presence does not need to speak to be felt; it lingers in the void, reminding us that even when no sound is made, others are still here with you.</p>
+        <p class="quote">"All of humanity’s problems stem from man’s inability to sit quietly in a room alone."</p>
+        <p class="quote-author">- Blaise Pascal</p>
+    </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+        import { getDatabase, ref, set, remove, onDisconnect, onValue, get } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDD0emS5Y2wiRrYF0h4Ar800-0ZUfEMTS8",
+            authDomain: "exhib2-counter.firebaseapp.com",
+            databaseURL: "https://exhib2-counter-default-rtdb.europe-west1.firebasedatabase.app/",
+            projectId: "exhib2-counter",
+            storageBucket: "exhib2-counter.firebasestorage.app",
+            messagingSenderId: "857898480107",
+            appId: "1:857898480107:web:8251af35e527428a3a29ae"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        const userId = "user-" + Math.random().toString(36).substr(2, 9);
+        const userRef = ref(db, "online/" + userId);
+        const onlineRef = ref(db, "online/");
+
+        get(onlineRef).then(snapshot => {
+
+        const count = snapshot.size;
+
+        if (count < 50) {
+            set(userRef, true);
+            onDisconnect(userRef).remove();
+
+            onValue(onlineRef, snap => {
+
+            const onlineUsers = snap.size;
+            document.getElementById("counter").innerText = onlineUsers;
+
+            if (onlineUsers === 1) {
+                document.getElementById("top-text").innerText = "There is currently";
+                document.getElementById("bottom-text").innerText = "person here. Just you.";
+                document.getElementById("punch").innerText = "One soul drifts quietly, its echo unheard.";
+            } else {
+                document.getElementById("top-text").innerText = "There are currently";
+                document.getElementById("bottom-text").innerText = "people here.";
+                document.getElementById("punch").innerText = "You are here together, yet forever separate.";
+            }
+            });
+
+        } else {
+            document.getElementById("counter").innerText = "50+";
+
+            remove(userRef);
+        }
+        });
+    </script>
+</body>
+</html>
